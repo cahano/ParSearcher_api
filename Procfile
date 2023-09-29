@@ -1,1 +1,1 @@
-worker: python tornado_server_v1.py
+web: python tornado_server_v1.py
