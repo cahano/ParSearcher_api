@@ -7,6 +7,7 @@
 # Web server
 from tornado.web import Application, RequestHandler
 from tornado.ioloop import IOLoop
+from tornado.options import define, options, parse_command_line
 
 # Libs for handling file upload, processing, and user download
 import tempfile
@@ -32,6 +33,9 @@ our_log = ParsearchLogger()
 # Creating temp directory for file handling
 temp_dir = tempfile.TemporaryDirectory(suffix = '.psh')
 os.chdir(temp_dir.name)
+
+# Setting port
+define("port", default=8008, help="run on the given port", type=int)
 
 
 class UploadHandler(RequestHandler):
@@ -114,16 +118,18 @@ class DownloadHandler(RequestHandler):
             
 
 def make_app():
-  return Application([
-     
-     ("/upload", UploadHandler),
-     ("/download", DownloadHandler)
+  
+    parse_command_line()
 
-     ])
+    app =  Application([
+        ("/upload", UploadHandler),
+        ("/download", DownloadHandler)
+        ])
+
+    app.listen(options.port)
+    IOLoop.instance().start()
 
 
 if __name__ == '__main__':
-    app = make_app()
-    app.listen(8008)
-    IOLoop.instance().start()
+    make_app()
 
