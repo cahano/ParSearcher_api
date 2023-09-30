@@ -101,10 +101,10 @@ class DownloadHandler(RequestHandler):
     our_log.logit('PDF(s) Parsed')
 
     # Setting headers to deal with xml files
-    self.set_header('Content-Type',
-                    'application/vnd.openxmlformats-officedocument.spreedsheetml.sheet')
-    self.set_header('Content-Disposition',
-                    'attachment; filename=%s' % output_name)
+    # self.set_header('Content-Type',
+    #                 'application/vnd.openxmlformats-officedocument.spreedsheetml.sheet')
+    # self.set_header('Content-Disposition',
+    #                 'attachment; filename=%s' % output_name)
     # Handling results XLSX file download
     with open(output_name, 'rb') as pdf:
         while True:
