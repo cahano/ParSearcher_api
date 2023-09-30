@@ -44,7 +44,7 @@ def camelot_to_xlsx(input_path: str,
     '''
     
 
-    our_log.debug('Extracting tables from %s' % input_filename)
+    our_log.logit('Extracting tables from %s' % input_filename)
 
     # Running extraction
     cam_tabs = camelot.read_pdf(os.path.join(input_path,
@@ -56,10 +56,10 @@ def camelot_to_xlsx(input_path: str,
 
     # Checking for table extraction(s)
     if len(cam_tabs) == 0:        
-        our_log.debug('*** NO tables extracted by camelot! ***')
+        our_log.logit('*** NO tables extracted by camelot! ***')
         return None
     # logging input info
-    our_log.debug('camelot succesfully extracted {} table(s) from {}'.format(len(cam_tabs),
+    our_log.logit('camelot succesfully extracted {} table(s) from {}'.format(len(cam_tabs),
                                                                           input_filename))
 
     # Create a Pandas Excel writer using XlsxWriter as the engine
