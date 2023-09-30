@@ -73,7 +73,7 @@ def camelot_to_xlsx(input_path: str,
     for table in cam_tabs:
 
         our_log.logit('table------')
-        our_log.logit(table.to_string())
+        our_log.logit(table.df.to_string())
 
         # Storing extracted table
         ext_df = table.df
