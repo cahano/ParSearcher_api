@@ -7,7 +7,7 @@ colorama==0.4.6
 cryptography==41.0.4
 et-xmlfile==1.1.0
 numpy==1.26.0
-opencv-python==4.8.1.78
+opencv-python-headless==4.8.1.78
 openpyxl==3.1.2
 pandas==2.1.1
 pdfminer.six==20221105
