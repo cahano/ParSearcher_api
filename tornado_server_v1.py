@@ -105,6 +105,7 @@ class DownloadHandler(RequestHandler):
 
     our_log.logit('TEMP DIR AFTER PARSE:')
     our_log.logit(os.listdir())
+    our_log.logit(os.getcwd())
 
     # Setting headers to deal with xml files
     self.set_header('Content-Type',
