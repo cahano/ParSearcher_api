@@ -82,7 +82,6 @@ def camelot_to_xlsx(input_path: str,
         sheet_count += 1
 
     # Close the Pandas Excel writer and output the Excel file
-    cam_writer.save()
     cam_writer.close()
 
 
