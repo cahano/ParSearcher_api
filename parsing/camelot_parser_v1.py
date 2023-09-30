@@ -75,6 +75,8 @@ def camelot_to_xlsx(input_path: str,
         # Storing extracted table
         ext_df = table.df
 
+        our_log.logit(ext_df)
+
         # Convert the dataframe to an XlsxWriter Excel object
         ext_df.to_excel(cam_writer,
                         sheet_name = 'Sheet ' + str(sheet_count))
