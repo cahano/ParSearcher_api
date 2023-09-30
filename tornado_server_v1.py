@@ -87,6 +87,9 @@ class DownloadHandler(RequestHandler):
 
     our_log.logit('Parsing PDF(s)')
 
+    our_log.logit('TEMP DIR BEFORE PARSE:')
+    our_log.logit(os.listdir())
+
     # Calling camelot PDF parser -> xlsx output
     ## HARD CODED PAGES FOR NOW (FOCUSING ON GLOSSARY OF TERMS)
     ### LOGIC TO BE ADDED THAT WILL DETECT GLOSSARY OF TERMS, ANNEX A, etc
@@ -99,6 +102,9 @@ class DownloadHandler(RequestHandler):
                     '79-93')
 
     our_log.logit('PDF(s) Parsed')
+
+    our_log.logit('TEMP DIR AFTER PARSE:')
+    our_log.logit(os.listdir())
 
     # Setting headers to deal with xml files
     self.set_header('Content-Type',
