@@ -40,6 +40,23 @@ define("port", default=8008, help="run on the given port", type=int)
 
 class UploadHandler(RequestHandler):
 
+    def set_default_headers(self):
+        '''
+        Allows local react <-> tornado cnxn
+
+        NOT SAFE IN PROD!!!
+        '''
+        self.set_header("Access-Control-Allow-Origin",
+                        "https://cahano.github.io")
+        
+        self.set_header("Access-Control-Allow-Headers",
+                        "Origin, X-Requested-With,Content-Type, Accept, Authorization")
+        
+        self.set_header('Access-Control-Allow-Methods',
+                        'GET,HEAD,OPTIONS,POST,PUT,DELETE')
+        
+        self.set_status(204)
+
     def post(self):
         '''
         Retrieving pdf bytes from FE
@@ -66,7 +83,7 @@ class DownloadHandler(RequestHandler):
         NOT SAFE IN PROD!!!
         '''
         self.set_header("Access-Control-Allow-Origin",
-                        "*")
+                        "https://cahano.github.io")
         
         self.set_header("Access-Control-Allow-Headers",
                         "Origin, X-Requested-With,Content-Type, Accept, Authorization")
