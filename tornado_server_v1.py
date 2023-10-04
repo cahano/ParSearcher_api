@@ -1,7 +1,7 @@
 #####################################################################
-### Testing tornado server, to connect w/ react FE via axios
-### 9/25/2023
-### complete pdf upload, pdf parse, xlsx download succeeding
+### Tornado server, to connect w/ react FE via axios
+### 10/4/2023
+### Hosted via Heroku
 #####################################################################
 
 # Web server
@@ -12,9 +12,7 @@ from tornado.options import define, options, parse_command_line
 # Libs for handling file upload, processing, and user download
 import tempfile
 import os
-
 import sys
-import os
 
 # Needed to add this to ensure logger imported succesfully
 ## something with my file structure
@@ -42,15 +40,13 @@ class UploadHandler(RequestHandler):
 
     def set_default_headers(self):
         '''
-        Allows local react <-> tornado cnxn
-
-        NOT SAFE IN PROD!!!
+        Allows react <-> tornado cnxn
         '''
         self.set_header("Access-Control-Allow-Origin",
                         "https://cahano.github.io")
         
         self.set_header("Access-Control-Allow-Headers",
-                        "Origin, X-Requested-With,Content-Type, Accept, Authorization")
+                        "Origin, X-Requested-With, Content-Type, Accept, Authorization")
         
         self.set_header('Access-Control-Allow-Methods',
                         'GET,HEAD,OPTIONS,POST,PUT,DELETE')
@@ -78,9 +74,7 @@ class DownloadHandler(RequestHandler):
   
   def set_default_headers(self):
         '''
-        Allows local react <-> tornado cnxn
-
-        NOT SAFE IN PROD!!!
+        Allows react <-> tornado cnxn
         '''
         self.set_header("Access-Control-Allow-Origin",
                         "https://cahano.github.io")

@@ -87,11 +87,11 @@ def camelot_to_xlsx(input_path: str,
     cam_writer.close()
 
 
-# Starting timer
-start_time = timeit.default_timer()
 
 ##########################
 
+# # Starting timer
+# start_time = timeit.default_timer()
 
 ### NEED TO MAKE DETECTION OF TABLES AUTOMATED
 ### LOTS OF REGEX
