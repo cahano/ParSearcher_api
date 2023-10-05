@@ -174,7 +174,7 @@ class DownloadHandler(RequestHandler):
                         'GET,HEAD,OPTIONS,POST,PUT,DELETE')
         
 
-
+    @gen.coroutine
     def get(self):
         '''
         Returns outputted parsed file once it has completed
