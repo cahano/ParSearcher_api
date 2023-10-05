@@ -72,7 +72,7 @@ class UploadHandler(RequestHandler):
 
 
 
-class DownloadHandler(RequestHandler):
+class ParseHandler(RequestHandler):
   
   def set_default_headers(self):
         '''
@@ -105,10 +105,32 @@ class DownloadHandler(RequestHandler):
     our_log.logit('XXX CALLING VANILLOT IN GET')
     # our_log.logit('TEMP DIR BEFORE PARSE:')
     # our_log.logit(os.listdir())
+
+    # Starting worker for parsing
     yield self.call_vanillot()
+
     # our_log.logit('TEMP DIR AFTER PARSE:')
     # our_log.logit(os.listdir())
 
+    our_log.logit("ZZZZ ENDING CALL KICKING OFF TORNADO")
+
+    self.write('parser initiated')
+
+    # # Setting headers to deal with xlsx files
+    # self.set_header('Content-Type',
+    #                 'application/vnd.openxmlformats-officedocument.spreedsheetml.sheet')
+    # self.set_header('Content-Disposition',
+    #                 'attachment; filename=%s' % output_name)
+    # # Handling results XLSX file download
+    # with open(output_name, 'rb') as pdf:
+    #     while True:
+    #         _buf = pdf.read(4096)
+    #         if _buf:
+    #             self.write(_buf)
+    #         else:
+    #             pdf.close()
+    #             self.finish()
+    #             return
 
   @gen.coroutine      
   def call_vanillot(self):
@@ -127,21 +149,56 @@ class DownloadHandler(RequestHandler):
     our_log.logit('TEMP DIR AFTER PARSE:')
     our_log.logit(os.listdir())
 
-    # Setting headers to deal with xlsx files
-    self.set_header('Content-Type',
-                    'application/vnd.openxmlformats-officedocument.spreedsheetml.sheet')
-    self.set_header('Content-Disposition',
-                    'attachment; filename=%s' % output_name)
-    # Handling results XLSX file download
-    with open(output_name, 'rb') as pdf:
-        while True:
-            _buf = pdf.read(4096)
-            if _buf:
-                self.write(_buf)
-            else:
-                pdf.close()
-                self.finish()
-                return
+
+class DownloadHandler(RequestHandler):
+  
+    def set_default_headers(self):
+        '''
+        Allows react <-> tornado cnxn
+        '''
+        # Accepts request originating from OCC github
+        self.set_header("Access-Control-Allow-Origin",
+                        "https://cahano.github.io")
+        
+        self.set_header("Access-Control-Allow-Headers",
+                        "Origin, X-Requested-With,Content-Type, Accept, Authorization")
+        
+        self.set_header('Access-Control-Allow-Methods',
+                        'GET,HEAD,OPTIONS,POST,PUT,DELETE')
+        
+
+
+    def get(self):
+        '''
+        Returns outputted parsed file once it has completed
+        * This will be pinged by react side until it downloads 
+        '''
+        our_log.logit('DOWNLOADING PDF(s)')
+
+        output_name = 'parse_results.xlsx'
+
+        # CHecking if parsed results file exists in temp dir
+        if output_name in os.listdir():
+            self.set_status(200)
+            # Setting headers to deal with xlsx files
+            self.set_header('Content-Type',
+                            'application/vnd.openxmlformats-officedocument.spreedsheetml.sheet')
+            self.set_header('Content-Disposition',
+                            'attachment; filename=%s' % output_name)
+            # Handling results XLSX file download
+            with open(output_name, 'rb') as pdf:
+                while True:
+                    _buf = pdf.read(4096)
+                    if _buf:
+                        self.write(_buf)
+                    else:
+                        pdf.close()
+                        self.finish()
+                        return
+        else:
+            self.set_status(911)
+            return
+
 
 
 
@@ -151,7 +208,8 @@ def make_app():
 
     app =  Application([
         ("/upload", UploadHandler),
-        ("/download", DownloadHandler)
+        ("/parse", ParseHandler),
+        ("/download", DownloadHandler),
         ])
 
     app.listen(options.port)
