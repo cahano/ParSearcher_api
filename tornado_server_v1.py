@@ -95,7 +95,7 @@ class ParseHandler(RequestHandler):
   @gen.coroutine
   def get(self):
     '''
-    Parsing pdf doc and returning xlsx ouput
+    Initiates the parser, async
     '''
     # Setting input and output file names
     ## TO BE MADE FUNCTIONAL W.R.T. INPUT FILES
@@ -134,6 +134,9 @@ class ParseHandler(RequestHandler):
 
   @gen.coroutine      
   def call_vanillot(self):
+    '''
+    Runs vanillot parser
+    '''
     input_name = 'test_file.pdf'
     output_name = 'parse_results.xlsx'
 
@@ -179,6 +182,7 @@ class DownloadHandler(RequestHandler):
 
         # CHecking if parsed results file exists in temp dir
         if output_name in os.listdir():
+            # React-side si lookign for this status code to initiate download
             self.set_status(200)
             # Setting headers to deal with xlsx files
             self.set_header('Content-Type',
@@ -196,7 +200,7 @@ class DownloadHandler(RequestHandler):
                         self.finish()
                         return
         else:
-            self.set_status(911)
+            self.set_status(204)
             return
 
 
