@@ -5,6 +5,7 @@
 #####################################################################
 
 # Web server
+from tornado import gen
 from tornado.web import Application, RequestHandler
 from tornado.ioloop import IOLoop
 from tornado.options import define, options, parse_command_line
@@ -89,25 +90,23 @@ class DownloadHandler(RequestHandler):
         
         self.set_status(204)
 
+
+
+  @gen.coroutine
   def get(self):
     '''
     Parsing pdf doc and returning xlsx ouput
     '''
     # Setting input and output file names
     ## TO BE MADE FUNCTIONAL W.R.T. INPUT FILES
-    input_name = 'test_file.pdf'
+    # input_name = 'test_file.pdf'
     output_name = 'parse_results.xlsx'
 
-    our_log.logit('TEMP DIR BEFORE PARSE:')
-    our_log.logit(os.listdir())
-
-    # Calling vanilla PyPDF2 and camelot parser
-    vanillot_ppm(input_name,
-                 os.getcwd(),
-                 output_name)
-    
-    our_log.logit('TEMP DIR AFTER PARSE:')
-    our_log.logit(os.listdir())
+    # our_log.logit('TEMP DIR BEFORE PARSE:')
+    # our_log.logit(os.listdir())
+    yield self.call_vanillot()
+    # our_log.logit('TEMP DIR AFTER PARSE:')
+    # our_log.logit(os.listdir())
 
     # Setting headers to deal with xml files
     self.set_header('Content-Type',
@@ -124,7 +123,17 @@ class DownloadHandler(RequestHandler):
                 pdf.close()
                 self.finish()
                 return
-            
+
+  @gen.coroutine      
+  def call_vanillot():
+    input_name = 'test_file.pdf'
+    output_name = 'parse_results.xlsx'
+    # Calling vanilla PyPDF2 and camelot parser
+    vanillot_ppm(input_name,
+                 os.getcwd(),
+                 output_name)
+
+
 
 def make_app():
   
