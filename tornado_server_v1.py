@@ -9,6 +9,8 @@ from tornado import gen
 from tornado.web import Application, RequestHandler
 from tornado.ioloop import IOLoop
 from tornado.options import define, options, parse_command_line
+from tornado.concurrent import run_on_executor
+from concurrent.futures import ThreadPoolExecutor
 
 # Libs for handling file upload, processing, and user download
 import tempfile
@@ -36,6 +38,7 @@ os.chdir(temp_dir.name)
 # Setting port
 define("port", default=8008, help="run on the given port", type=int)
 
+MAX_WORKERS = 16
 
 class UploadHandler(RequestHandler):
 
@@ -73,6 +76,7 @@ class UploadHandler(RequestHandler):
 
 
 class ParseHandler(RequestHandler):
+  executor = ThreadPoolExecutor(max_workers=MAX_WORKERS)
   
   def set_default_headers(self):
         '''
@@ -132,7 +136,7 @@ class ParseHandler(RequestHandler):
     #             self.finish()
     #             return
 
-  @gen.coroutine      
+  @run_on_executor      
   def call_vanillot(self):
     '''
     Runs vanillot parser
