@@ -109,21 +109,6 @@ class DownloadHandler(RequestHandler):
     # our_log.logit('TEMP DIR AFTER PARSE:')
     # our_log.logit(os.listdir())
 
-    # Setting headers to deal with xml files
-    self.set_header('Content-Type',
-                    'application/vnd.openxmlformats-officedocument.spreedsheetml.sheet')
-    self.set_header('Content-Disposition',
-                    'attachment; filename=%s' % output_name)
-    # Handling results XLSX file download
-    with open(output_name, 'rb') as pdf:
-        while True:
-            _buf = pdf.read(4096)
-            if _buf:
-                self.write(_buf)
-            else:
-                pdf.close()
-                self.finish()
-                return
 
   @gen.coroutine      
   def call_vanillot(self):
@@ -141,6 +126,22 @@ class DownloadHandler(RequestHandler):
     
     our_log.logit('TEMP DIR AFTER PARSE:')
     our_log.logit(os.listdir())
+
+    # Setting headers to deal with xlsx files
+    self.set_header('Content-Type',
+                    'application/vnd.openxmlformats-officedocument.spreedsheetml.sheet')
+    self.set_header('Content-Disposition',
+                    'attachment; filename=%s' % output_name)
+    # Handling results XLSX file download
+    with open(output_name, 'rb') as pdf:
+        while True:
+            _buf = pdf.read(4096)
+            if _buf:
+                self.write(_buf)
+            else:
+                pdf.close()
+                self.finish()
+                return
 
 
 
