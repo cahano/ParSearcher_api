@@ -102,6 +102,7 @@ class DownloadHandler(RequestHandler):
     # input_name = 'test_file.pdf'
     output_name = 'parse_results.xlsx'
 
+    our_log.logit('XXX CALLING VANILLOT IN GET')
     # our_log.logit('TEMP DIR BEFORE PARSE:')
     # our_log.logit(os.listdir())
     yield self.call_vanillot()
@@ -125,13 +126,21 @@ class DownloadHandler(RequestHandler):
                 return
 
   @gen.coroutine      
-  def call_vanillot():
+  def call_vanillot(self):
     input_name = 'test_file.pdf'
     output_name = 'parse_results.xlsx'
+
+    our_log.logit('*** CALLING VANILLOT IN COROUTINE')
+    our_log.logit('TEMP DIR BEFORE PARSE:')
+    our_log.logit(os.listdir())    
+
     # Calling vanilla PyPDF2 and camelot parser
     vanillot_ppm(input_name,
                  os.getcwd(),
                  output_name)
+    
+    our_log.logit('TEMP DIR AFTER PARSE:')
+    our_log.logit(os.listdir())
 
 
 
