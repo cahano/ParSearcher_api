@@ -4,8 +4,14 @@
 ### Will be called -async- with a Tornado worker
 #####################################################################
 
+import sys
 import os
 import timeit
+
+# Needed to add this to ensure logger imported succesfully
+## something with my file structure
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.dirname(SCRIPT_DIR))
 
 # Importing parsing tools
 from lib.pypdf_regex_camelot import (PyPDF2_parse,
