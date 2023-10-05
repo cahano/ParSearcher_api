@@ -8,21 +8,20 @@ import sys
 import os
 import timeit
 
-# Needed to add this to ensure logger imported succesfully
-## something with my file structure
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(os.path.dirname(SCRIPT_DIR))
+# # Needed to add this to ensure logger imported succesfully
+# ## something with my file structure
+# SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+# sys.path.append(os.path.dirname(SCRIPT_DIR))
 
-print(SCRIPT_DIR)
-print(os.getcwd())
-print(os.listdir())
+# print(SCRIPT_DIR)
+# print(os.getcwd())
 
 # Importing parsing tools
-from lib.pypdf_regex_camelot import ( PyPDF2_parse,
-                                      regex_get_range,
-                                      camelot_to_xlsx )
+from parsing.lib.pypdf_regex_camelot import ( PyPDF2_parse,
+                                              regex_get_range,
+                                              camelot_to_xlsx )
 # Importing constants (biz logic)
-from constants.biz_logic import RMBSLogic
+from parsing.constants.biz_logic import RMBSLogic
 # Logger
 from our_logger.parsearch_logger import ParsearchLogger
 our_log = ParsearchLogger()
