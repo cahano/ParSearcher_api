@@ -23,7 +23,7 @@ sys.path.append(os.path.dirname(SCRIPT_DIR))
 from our_logger.parsearch_logger import ParsearchLogger
 
 # Parsing lib
-from parsing.camelot_parser_v1 import camelot_to_xlsx
+from parsing.vanillot_v1 import vanillot_ppm
 
 # init logger
 our_log = ParsearchLogger()
@@ -42,6 +42,7 @@ class UploadHandler(RequestHandler):
         '''
         Allows react <-> tornado cnxn
         '''
+        # Accepts request originating from OCC github
         self.set_header("Access-Control-Allow-Origin",
                         "https://cahano.github.io")
         
@@ -76,6 +77,7 @@ class DownloadHandler(RequestHandler):
         '''
         Allows react <-> tornado cnxn
         '''
+        # Accepts request originating from OCC github
         self.set_header("Access-Control-Allow-Origin",
                         "https://cahano.github.io")
         
@@ -96,27 +98,16 @@ class DownloadHandler(RequestHandler):
     input_name = 'test_file.pdf'
     output_name = 'parse_results.xlsx'
 
-    our_log.logit('Parsing PDF(s)')
-
     our_log.logit('TEMP DIR BEFORE PARSE:')
     our_log.logit(os.listdir())
 
-    # Calling camelot PDF parser -> xlsx output
-    ## HARD CODED PAGES FOR NOW (FOCUSING ON GLOSSARY OF TERMS)
-    ### LOGIC TO BE ADDED THAT WILL DETECT GLOSSARY OF TERMS, ANNEX A, etc
-    #### SUCH THAT NO PAGE NUMBER WILL BE PASSED IN
-    ##### RATHER PDF(S) AND A DICT W LOGIC DESCRIBING WHAT DATA TO GET FROM THOSE PDF(S)
-    camelot_to_xlsx(os.getcwd(),
-                    input_name,
-                    os.getcwd(),
-                    output_name,
-                    '79-93')
-
-    our_log.logit('PDF(s) Parsed')
-
+    # Calling vanilla PyPDF2 and camelot parser
+    vanillot_ppm(input_name,
+                 os.getcwd(),
+                 output_name)
+    
     our_log.logit('TEMP DIR AFTER PARSE:')
     our_log.logit(os.listdir())
-    our_log.logit(os.getcwd())
 
     # Setting headers to deal with xml files
     self.set_header('Content-Type',
