@@ -13,7 +13,7 @@ pandas==2.1.1
 pdfminer.six==20221105
 pycparser==2.21
 pyPdf==1.13
-PyPDF2<3.0.0
+PyPDF2==2.9.0
 python-dateutil==2.8.2
 pytz==2023.3.post1
 six==1.16.0
