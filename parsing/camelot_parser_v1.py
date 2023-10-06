@@ -20,7 +20,7 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
 # Logger
-from our_logger.parsearch_logger import ParsearchLogger
+from ..our_logger.parsearch_logger import ParsearchLogger
 
 our_log = ParsearchLogger()
 
