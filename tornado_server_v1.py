@@ -113,7 +113,7 @@ class ParseHandler(RequestHandler):
 
     our_log.logit("ZZZZ ENDING CALL KICKING OFF TORNADO")
 
-    self.write('parser initiated')
+    self.finish()
 
   @run_on_executor      
   def call_vanillot(self):
