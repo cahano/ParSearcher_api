@@ -67,4 +67,3 @@ class ParsearchLogger:
         '''
         self.our_log.debug(msg)
 
-
