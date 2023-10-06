@@ -1,0 +1,4 @@
+# filter out pdfs from git commit
+/*.pdf
+# filter out these cache files
+*.pyc

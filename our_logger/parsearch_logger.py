@@ -35,19 +35,19 @@ class BaseLogger:
         Building simple logger
         '''
         p_log = logger.getLogger('parsearch')
-        p_log.setLevel(logger.DEBUG)
+        p_log.setLevel(logger.INFO)
 
         # Setting logging so it appears in console
         # THIS IS FOR LOCAL DEV
         console = logger.StreamHandler()
-        console.setLevel(level = logger.DEBUG)
+        console.setLevel(level = logger.INFO)
 
         formatter = logger.Formatter('%(levelname)s::: %(message)s')
 
         console.setFormatter(formatter)
         p_log.addHandler(console)
 
-        p_log.debug('*** LOGGER INSTANTIATED @ %s ***' % dt_string)
+        p_log.INFO('*** LOGGER INSTANTIATED @ %s ***' % dt_string)
 
         return p_log
 
@@ -65,5 +65,5 @@ class ParsearchLogger:
         '''
         Simple logger call
         '''
-        self.our_log.debug(msg)
+        self.our_log.INFO(msg)
 
