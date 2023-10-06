@@ -1,0 +1,2 @@
+# filter out pdfs from git commit
+/*.pdf
