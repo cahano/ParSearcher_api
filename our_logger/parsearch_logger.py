@@ -47,7 +47,7 @@ class BaseLogger:
         console.setFormatter(formatter)
         p_log.addHandler(console)
 
-        p_log.INFO('*** LOGGER INSTANTIATED @ %s ***' % dt_string)
+        p_log.info('*** LOGGER INSTANTIATED @ %s ***' % dt_string)
 
         return p_log
 
@@ -65,5 +65,5 @@ class ParsearchLogger:
         '''
         Simple logger call
         '''
-        self.our_log.INFO(msg)
+        self.our_log.info(msg)
 

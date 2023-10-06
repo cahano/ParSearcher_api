@@ -107,34 +107,13 @@ class ParseHandler(RequestHandler):
     output_name = 'parse_results.xlsx'
 
     our_log.logit('XXX CALLING VANILLOT IN GET')
-    # our_log.logit('TEMP DIR BEFORE PARSE:')
-    # our_log.logit(os.listdir())
 
     # Starting worker for parsing
     yield self.call_vanillot()
 
-    # our_log.logit('TEMP DIR AFTER PARSE:')
-    # our_log.logit(os.listdir())
-
     our_log.logit("ZZZZ ENDING CALL KICKING OFF TORNADO")
 
     self.write('parser initiated')
-
-    # # Setting headers to deal with xlsx files
-    # self.set_header('Content-Type',
-    #                 'application/vnd.openxmlformats-officedocument.spreedsheetml.sheet')
-    # self.set_header('Content-Disposition',
-    #                 'attachment; filename=%s' % output_name)
-    # # Handling results XLSX file download
-    # with open(output_name, 'rb') as pdf:
-    #     while True:
-    #         _buf = pdf.read(4096)
-    #         if _buf:
-    #             self.write(_buf)
-    #         else:
-    #             pdf.close()
-    #             self.finish()
-    #             return
 
   @run_on_executor      
   def call_vanillot(self):
