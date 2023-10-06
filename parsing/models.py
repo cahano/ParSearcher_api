@@ -1,5 +1,7 @@
 import logging
 import uuid
+import dataclasses
+import sys
 from typing import List, Dict, Any, Optional, Union
 from dataclasses import dataclass
 
@@ -9,8 +11,8 @@ Currently use the PPM schema as starting point and generalize as we go
 If we ever build ML models based on what clients want we can add/remove as we go
 """
 
+logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 log = logging.getLogger(__name__)
-log.setLevel(logging.INFO)
 
 @dataclass
 class MortgageStatistics:
@@ -47,10 +49,12 @@ class Page:
     """
         What's a page? This is a page
     """
-    page_id: str
+    page_number: int
     # not sure what I want to limit this down to yet
     page_contents: Union[str, dict, PPM_Schema]
-
+    possible_table: Optional[bool] = dataclasses.field(default_factory=bool)
+    page_tag: Optional[str] = None
+    
     @property
     def page_len(self) -> Optional[str]:
         if isinstance(self.page_contents, str):
@@ -66,12 +70,12 @@ class PDF:
     id = uuid.uuid4()
     request_id: str
     create_date: str    # datetime iso format
-    pages: Optional[List[Page]]
+    pages: Optional[List[Page]] = dataclasses.field(default_factory=list)
     
     #schemas: List[Union[PPM_Schema]]
-    schemas: Optional[List[PPM_Schema]]
+    schemas: Optional[List[PPM_Schema]] = dataclasses.field(default_factory=list)
 
-    metadata: Optional[Dict[Any, Any]]
+    metadata: Optional[Dict[Any, Any]] = None
 
     @property
     def total_pages(self) -> Optional[int]:
