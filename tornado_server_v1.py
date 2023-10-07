@@ -101,19 +101,18 @@ class ParseHandler(RequestHandler):
     '''
     Initiates the parser, async
     '''
-    # Setting input and output file names
-    ## TO BE MADE FUNCTIONAL W.R.T. INPUT FILES
-    # input_name = 'test_file.pdf'
-    output_name = 'parse_results.xlsx'
 
     our_log.logit('XXX CALLING VANILLOT IN GET')
+
+    # Ending call early so as not to violate Heroku 30sec timeout
+    self.finish()
+
+    our_log.logit('!!! RUNNING CODE AFTER CALL COMPLETED !!!')
 
     # Starting worker for parsing
     yield self.call_vanillot()
 
     our_log.logit("ZZZZ ENDING CALL KICKING OFF TORNADO")
-
-    self.finish()
 
   @run_on_executor      
   def call_vanillot(self):
