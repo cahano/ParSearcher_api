@@ -129,8 +129,15 @@ def camelot_to_xlsx(input_path: str,
     cam_tabs = camelot.read_pdf(os.path.join(input_path,
                                                 input_filename),
                                  pages = page_range,
-                                 flavor ='stream',
+                                 flavor = 'stream',
                                  edge_tol = 500)
+
+
+
+    ### NEED TO CLEAN TABLE OUTPUT
+    ##### GENERAL CLEANING LOGIC
+
+    ### CUSTOM LOGIC CALLED HERE WILL BE STORED IN A LOGIC FILE
 
 
     # Checking for table extraction(s)
@@ -150,6 +157,7 @@ def camelot_to_xlsx(input_path: str,
     sheet_count = 0
     # Iterating through camelot-extracted tables
     for table in cam_tabs:
+        #mofhayat: for table, sheet_count in enumerate(cam_tabs):
 
         # Storing extracted table
         ext_df = table.df
@@ -170,11 +178,11 @@ def camelot_to_xlsx(input_path: str,
 
 ###### TESTING
 
-# import timeit
+import timeit
 
-# ## FOR LOCAL TESTING
-# # Setting wd to get pdf
-# os.chdir(r'C:\Users\owen_\Desktop\CareerRel\O1\py_related\full_stack\ParseDF\test_docs')
+## FOR LOCAL TESTING
+# Setting wd to get pdf
+os.chdir(r'C:\Users\owen_\Desktop\CareerRel\O1\py_related\full_stack\ParseDF\test_docs')
 
 # # SIMULATE PyPDF2 parser + page map
 # # Read in file
@@ -194,7 +202,7 @@ def camelot_to_xlsx(input_path: str,
 # # ##
 
 # # Starting timer
-# start_time = timeit.default_timer()
+start_time = timeit.default_timer()
 
 # # Pulling PDF contents as string #
 # # ppm_contents = PyPDF2_parse('JPMMT_2007_ppm.pdf')
@@ -217,17 +225,29 @@ def camelot_to_xlsx(input_path: str,
 # print(terms_range)
 # print(annex_range)
 
-# # # Applying camelot to the returned table ranges #
-# # term_sheet_dfs = camelot_to_xlsx(r'',
-# #                                  'JPMMT_2007_ppm.pdf',
-# #                                  r'',
-# #                                  'parsed_terms.xlsx',
-# #                                  '{}-{}, {}-{}'.format(terms_range[0], terms_range[1],
-# #                                                        annex_range[0], annex_range[1]))
+# FOR LOCAL TESTING
+terms_range = (79, 93)
+annex_range = (95, 119)
+
+# Applying camelot to the returned table ranges #
+term_sheet_dfs = camelot_to_xlsx(r'',
+                                 'JPMMT_2007_ppm.pdf',
+                                 r'',
+                                 'table_test_v1.xlsx',
+                                 '{}-{}'.format(annex_range[0], annex_range[1]))
 
 
-# # Ending timer
-# end_time = timeit.default_timer()
+# # Applying camelot to the returned table ranges #
+# term_sheet_dfs = camelot_to_xlsx(r'',
+#                                  'JPMMT_2007_ppm.pdf',
+#                                  r'',
+#                                  'parsed_terms.xlsx',
+#                                  '{}-{}, {}-{}'.format(terms_range[0], terms_range[1],
+#                                                        annex_range[0], annex_range[1]))
 
-# print()
-# print('~~~~~~~~~ runtime: %f ~~~~~~~~~' % (end_time - start_time))
+
+# Ending timer
+end_time = timeit.default_timer()
+
+print()
+print('~~~~~~~~~ runtime: %f ~~~~~~~~~' % (end_time - start_time))

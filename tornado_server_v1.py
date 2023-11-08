@@ -38,7 +38,12 @@ os.chdir(temp_dir.name)
 # Setting port
 define("port", default=8008, help="run on the given port", type=int)
 
+# DEFINING API CONSTANTS
 MAX_WORKERS = 16
+# API only accepts requests from ParSearch Github pages or ParSearch AWS Amplify
+CORS_ENABLED = "https://cahano.github.io, https://main.d11sahf6v8stri.amplifyapp.com"
+HEADERS_ENABLED = "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+
 
 class UploadHandler(RequestHandler):
 
@@ -46,12 +51,11 @@ class UploadHandler(RequestHandler):
         '''
         Allows react <-> tornado cnxn
         '''
-        # Accepts request originating from OCC github
         self.set_header("Access-Control-Allow-Origin",
-                        "https://cahano.github.io")
+                        CORS_ENABLED)
         
         self.set_header("Access-Control-Allow-Headers",
-                        "Origin, X-Requested-With, Content-Type, Accept, Authorization")
+                        HEADERS_ENABLED)
         
         self.set_header('Access-Control-Allow-Methods',
                         'GET,HEAD,OPTIONS,POST,PUT,DELETE')
@@ -82,12 +86,11 @@ class ParseHandler(RequestHandler):
         '''
         Allows react <-> tornado cnxn
         '''
-        # Accepts request originating from OCC github
         self.set_header("Access-Control-Allow-Origin",
-                        "https://cahano.github.io")
+                        CORS_ENABLED)
         
         self.set_header("Access-Control-Allow-Headers",
-                        "Origin, X-Requested-With,Content-Type, Accept, Authorization")
+                        HEADERS_ENABLED)
         
         self.set_header('Access-Control-Allow-Methods',
                         'GET,HEAD,OPTIONS,POST,PUT,DELETE')
@@ -142,12 +145,11 @@ class DownloadHandler(RequestHandler):
         '''
         Allows react <-> tornado cnxn
         '''
-        # Accepts request originating from OCC github
         self.set_header("Access-Control-Allow-Origin",
-                        "https://cahano.github.io")
+                        CORS_ENABLED)
         
         self.set_header("Access-Control-Allow-Headers",
-                        "Origin, X-Requested-With,Content-Type, Accept, Authorization")
+                        HEADERS_ENABLED)
         
         self.set_header('Access-Control-Allow-Methods',
                         'GET,HEAD,OPTIONS,POST,PUT,DELETE')
