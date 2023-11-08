@@ -47,6 +47,8 @@ def get_html(file_path):
 
 
 
+### FOR TESTING
+
 
 # #### CLEANING CONVERTED HTML CONTENTS TO GET TABLES
 
