@@ -48,182 +48,182 @@ def get_html(file_path):
 
 
 
-#### CLEANING CONVERTED HTML CONTENTS TO GET TABLES
+# #### CLEANING CONVERTED HTML CONTENTS TO GET TABLES
 
-from bs4 import BeautifulSoup
+# from bs4 import BeautifulSoup
 
-import timeit
+# import timeit
 
-os.chdir(r'C:\Users\owen_\Desktop\CareerRel\O1\py_related\full_stack\ParseDF\test_docs')
+# os.chdir(r'C:\Users\owen_\Desktop\CareerRel\O1\py_related\full_stack\ParseDF\test_docs')
 
 
-start_time = timeit.default_timer()
+# start_time = timeit.default_timer()
 
-x = get_html('JPMMT_2007_ppm.pdf')
-# print(x)
-# print()
-# print()
+# x = get_html('JPMMT_2007_ppm.pdf')
+# # print(x)
+# # print()
+# # print()
 
-soup = BeautifulSoup(x[0], 'html.parser')
-########## HARDCODE div
-tag = soup.find_all('div')
-print(soup.prettify())
+# soup = BeautifulSoup(x[0], 'html.parser')
+# ########## HARDCODE div
+# tag = soup.find_all('div')
+# print(soup.prettify())
 
-# The four below lists compose all elements needed to rebuild a table
-titles = []
-col_sets = []
-col_headers = []
-# This will house, together, each set of cols that compose a table
-## e.g.   [ [[tab1_col1], [tab1_col2], ...], [[tab2_col1], [tab2_col2], ...] ]
-tables_list = []
-df_list = []
-footnotes = []
-# Looping through each <div> tag, which may include:
-##      a title, a column, a column title, or a footnote
-for i in tag:
-    print(i)
-    print()
+# # The four below lists compose all elements needed to rebuild a table
+# titles = []
+# col_sets = []
+# col_headers = []
+# # This will house, together, each set of cols that compose a table
+# ## e.g.   [ [[tab1_col1], [tab1_col2], ...], [[tab2_col1], [tab2_col2], ...] ]
+# tables_list = []
+# df_list = []
+# footnotes = []
+# # Looping through each <div> tag, which may include:
+# ##      a title, a column, a column title, or a footnote
+# for i in tag:
+#     print(i)
+#     print()
 
-    ### HANDLING TITLE
-    # TABLE TITLES HAVE HEIGHT OF 9px AND FOLLOWED by '<br/>'
-    ########## HARDCODE regex
-    if re.search(r'height:9px;">((.|\n)*)<br\/>', str(i)):
+#     ### HANDLING TITLE
+#     # TABLE TITLES HAVE HEIGHT OF 9px AND FOLLOWED by '<br/>'
+#     ########## HARDCODE regex
+#     if re.search(r'height:9px;">((.|\n)*)<br\/>', str(i)):
 
-        # print('XXXXX TITLE MATCH XXXXX')
-        # print(i)
+#         # print('XXXXX TITLE MATCH XXXXX')
+#         # print(i)
 
-        # Current matched value (could be one of title, column, col header, footnote, etc)
-        ########## HARDCODE regex
-        _matched_val = re.search(r'font-size:9px">((.|\n)*)<br\/>', str(i)).group(1)
-        # Storing current div's CSS left positioning
-        ########## HARDCODE regex
-        _match_left_pos = re.search(r'left:(\d+)px;', str(i)).group(1)
-        _match_height = re.search(r'height:(\d+)px;', str(i)).group(1)
-        # If CSS left positioning is less than 100, it's a title
-        ########## HARDCODE position threshold
-        # Titles
-        if float(_match_left_pos) < 100:
-            titles.append(_matched_val.rstrip('\n'))
+#         # Current matched value (could be one of title, column, col header, footnote, etc)
+#         ########## HARDCODE regex
+#         _matched_val = re.search(r'font-size:9px">((.|\n)*)<br\/>', str(i)).group(1)
+#         # Storing current div's CSS left positioning
+#         ########## HARDCODE regex
+#         _match_left_pos = re.search(r'left:(\d+)px;', str(i)).group(1)
+#         _match_height = re.search(r'height:(\d+)px;', str(i)).group(1)
+#         # If CSS left positioning is less than 100, it's a title
+#         ########## HARDCODE position threshold
+#         # Titles
+#         if float(_match_left_pos) < 100:
+#             titles.append(_matched_val.rstrip('\n'))
         
-        continue
+#         continue
 
 
-    # EDGE CASE EXISTS WHERE ONE FUCKING COL OF VALS HAS ONLY ONE SPAN
-    ## THE REST HAVE TWO
-    ### solved by count of '<br/>' > 3; eseentially a proxy for col length
-    #### therefore, a col of values will have greater than 3 of these....
-    if str(i).count('font-size:9px') > 1 \
-    or str(i).count('<br/>') > 3:
+#     # EDGE CASE EXISTS WHERE ONE FUCKING COL OF VALS HAS ONLY ONE SPAN
+#     ## THE REST HAVE TWO
+#     ### solved by count of '<br/>' > 3; eseentially a proxy for col length
+#     #### therefore, a col of values will have greater than 3 of these....
+#     if str(i).count('font-size:9px') > 1 \
+#     or str(i).count('<br/>') > 3:
         
-        # # ATTEMPTING TO WEED OUT COL HEADERS PASSING THROUGH EDGE CASE
-        # if str(i).count('span') > 3 and str(i).lower().find('total') == -1:
-        #     continue
+#         # # ATTEMPTING TO WEED OUT COL HEADERS PASSING THROUGH EDGE CASE
+#         # if str(i).count('span') > 3 and str(i).lower().find('total') == -1:
+#         #     continue
 
-        # Matching ENTIRE col
-        _matched_col = re.search(r'>((.|\n)*)<br\/>', str(i))
+#         # Matching ENTIRE col
+#         _matched_col = re.search(r'>((.|\n)*)<br\/>', str(i))
 
-        # print('**** MATCHED COL *******')
-        # print(_matched_col)
+#         # print('**** MATCHED COL *******')
+#         # print(_matched_col)
 
-        # Looping through each col value (re match split by <br/>)
-        _clean_col = []
-        ########## HARDCODE string logic
-        for col_val in _matched_col.group(1).split('<br/>'):
+#         # Looping through each col value (re match split by <br/>)
+#         _clean_col = []
+#         ########## HARDCODE string logic
+#         for col_val in _matched_col.group(1).split('<br/>'):
 
-            # print('**** COL VALUE ****')
-            # print(col_val)
+#             # print('**** COL VALUE ****')
+#             # print(col_val)
             
-            # clean individual col value
-            ########## HARDCODE string logic
-            clean_col_val = col_val.replace('<br/>', '')\
-                                   .replace('\n', '')\
-                                   .replace('%', '')
-            ### WEEDING OUT COL HEADERS
-            if ('Aggregate' in clean_col_val \
-            or 'Principal' in clean_col_val \
-            or 'Balance' in clean_col_val) \
-            and '(1)' not in clean_col_val:
-                print('WEEDING OUYT COL HEADERS')
-                print(clean_col_val)
-                break
+#             # clean individual col value
+#             ########## HARDCODE string logic
+#             clean_col_val = col_val.replace('<br/>', '')\
+#                                    .replace('\n', '')\
+#                                    .replace('%', '')
+#             ### WEEDING OUT COL HEADERS
+#             if ('Aggregate' in clean_col_val \
+#             or 'Principal' in clean_col_val \
+#             or 'Balance' in clean_col_val) \
+#             and '(1)' not in clean_col_val:
+#                 print('WEEDING OUYT COL HEADERS')
+#                 print(clean_col_val)
+#                 break
 
-            ## HANDING COL VALUES & FOOTNOTES
-            # if (1), it's a footnote
-            ########## HARDCODE string logic
-            if clean_col_val.find('(1)') != -1:
-                 footnotes.append(clean_col_val[clean_col_val.rfind('>')+1 : \
-                                               len(clean_col_val)].rstrip(' '))
-            # if there are more than 1 '>' it's a value that needs cleaning
-            ## remove all inline CSS from col value
-            elif clean_col_val.count('>') > 0:
-                 _clean_col.append(clean_col_val[clean_col_val.rfind('>')+1 : \
-                                                 len(clean_col_val)])
-            # otherwise, it's an already cleaned col value
-            else:
-                _clean_col.append(clean_col_val)
+#             ## HANDING COL VALUES & FOOTNOTES
+#             # if (1), it's a footnote
+#             ########## HARDCODE string logic
+#             if clean_col_val.find('(1)') != -1:
+#                  footnotes.append(clean_col_val[clean_col_val.rfind('>')+1 : \
+#                                                len(clean_col_val)].rstrip(' '))
+#             # if there are more than 1 '>' it's a value that needs cleaning
+#             ## remove all inline CSS from col value
+#             elif clean_col_val.count('>') > 0:
+#                  _clean_col.append(clean_col_val[clean_col_val.rfind('>')+1 : \
+#                                                  len(clean_col_val)])
+#             # otherwise, it's an already cleaned col value
+#             else:
+#                 _clean_col.append(clean_col_val)
 
 
-        # print('XXXXXXXX CLEANED COL XXXXXXXXXX')
-        # print(_clean_col)
-        # print('XXXXXXXXXXXXXX')
-        ### HANDLING TABLE PARTITIONING
-        #### because the <div>s do not do this as nicely as we'd like
-        # '__' signifies end of table
-        if (len(tables_list) > 0 \
-        and len([ x for x in _clean_col if x.find('__') != -1 ]) > 0) \
-        or (len(tables_list) == 4):
-            # append cols to final df for conversion
-            df_list.append(tables_list)
-            # Reset tables list for next table
-            tables_list = []
-        ####### THIS SEEKS TO REMOVE COL HEADERS THAT SNEAK THROUGH
-        elif _clean_col == []:
-            print('EMPTY CLEAN')
-            print(_clean_col)
-            continue
-        else:
-            print('XXXX APPENDING CLEAN COL')
-            print(_clean_col)
-            # Add col value if end of table (e.g. '__') is not detected
-            tables_list.append([ x for x in _clean_col if x.find('__') == -1 ])
-        print('~~~~~~~~~~ TQBLES LIST ~~~~~~~~~~')
-        print(tables_list)
-        print(df_list)
+#         # print('XXXXXXXX CLEANED COL XXXXXXXXXX')
+#         # print(_clean_col)
+#         # print('XXXXXXXXXXXXXX')
+#         ### HANDLING TABLE PARTITIONING
+#         #### because the <div>s do not do this as nicely as we'd like
+#         # '__' signifies end of table
+#         if (len(tables_list) > 0 \
+#         and len([ x for x in _clean_col if x.find('__') != -1 ]) > 0) \
+#         or (len(tables_list) == 4):
+#             # append cols to final df for conversion
+#             df_list.append(tables_list)
+#             # Reset tables list for next table
+#             tables_list = []
+#         ####### THIS SEEKS TO REMOVE COL HEADERS THAT SNEAK THROUGH
+#         elif _clean_col == []:
+#             print('EMPTY CLEAN')
+#             print(_clean_col)
+#             continue
+#         else:
+#             print('XXXX APPENDING CLEAN COL')
+#             print(_clean_col)
+#             # Add col value if end of table (e.g. '__') is not detected
+#             tables_list.append([ x for x in _clean_col if x.find('__') == -1 ])
+#         print('~~~~~~~~~~ TQBLES LIST ~~~~~~~~~~')
+#         print(tables_list)
+#         print(df_list)
 
-# Looping through collection of titles, tables, and footnotes
-final_dfs = []
-for title, table, footnote in zip(titles, df_list, footnotes):
-    print(title)
-    print(table)
-    print(footnote)
-    print()
-    print('---------------')
-    # Creating dataframe
-    temp_df = pd.DataFrame(table).T
-    temp_df.columns = ['',
-                       '# of Mtg Loans',
-                       'Agg $ Outstanding',
-                       'Agg % outstanding']
+# # Looping through collection of titles, tables, and footnotes
+# final_dfs = []
+# for title, table, footnote in zip(titles, df_list, footnotes):
+#     print(title)
+#     print(table)
+#     print(footnote)
+#     print()
+#     print('---------------')
+#     # Creating dataframe
+#     temp_df = pd.DataFrame(table).T
+#     temp_df.columns = ['',
+#                        '# of Mtg Loans',
+#                        'Agg $ Outstanding',
+#                        'Agg % outstanding']
 
-    # Append list of [title, df, footnote(s)]
-    final_dfs.append([title, temp_df, footnote])
+#     # Append list of [title, df, footnote(s)]
+#     final_dfs.append([title, temp_df, footnote])
 
-# Last cleanups
-for q in final_dfs:
-    ## If sum of % col is NoneType, set it to 100
-    # Subtract one to match pd index
-    if not q[1].at[len(q[1])-1, 'Agg % outstanding']:
-        q[1].at[len(q[1])-1, 'Agg % outstanding'] = 100.00
+# # Last cleanups
+# for q in final_dfs:
+#     ## If sum of % col is NoneType, set it to 100
+#     # Subtract one to match pd index
+#     if not q[1].at[len(q[1])-1, 'Agg % outstanding']:
+#         q[1].at[len(q[1])-1, 'Agg % outstanding'] = 100.00
 
-    print(q[1])
-    print()
+#     print(q[1])
+#     print()
 
-end_time = timeit.default_timer()
+# end_time = timeit.default_timer()
 
-print()
+# print()
 
-print()
-print('~~~~~~~~~ runtime: %f ~~~~~~~~~' % (end_time - start_time))
+# print()
+# print('~~~~~~~~~ runtime: %f ~~~~~~~~~' % (end_time - start_time))
 
 
 
