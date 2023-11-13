@@ -42,7 +42,11 @@ define("port", default=8008, help="run on the given port", type=int)
 MAX_WORKERS = 16
 # API only accepts requests from ParSearch Github pages OR ParSearch AWS Amplify
 ## (CAN ONLY EXPLICTLY ENABLE ONE - CORS POLICY)
-CORS_ENABLED = "https://main.d11sahf6v8stri.amplifyapp.com"
+# https://main.d2gv302q000zfo.amplifyapp.com/#
+# OCC AMPLIFY APP
+# CORS_ENABLED = "https://main.d11sahf6v8stri.amplifyapp.com"
+# MO / BIZ 
+CORS_ENABLED = "https://main.d2gv302q000zfo.amplifyapp.com"
 # CORS_ENABLED = "https://cahano.github.io"
 HEADERS_ENABLED = "Origin, X-Requested-With, Content-Type, Accept, Authorization"
 
