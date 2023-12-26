@@ -202,9 +202,9 @@ def make_app():
     parse_command_line()
 
     app =  Application([
-        ("/upload", UploadHandler),
-        ("/parse", ParseHandler),
-        ("/download", DownloadHandler),
+            ("/upload", UploadHandler),
+            ("/parse", ParseHandler),
+            ("/download", DownloadHandler),
         ])
 
     app.listen(options.port)
